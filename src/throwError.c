@@ -1,21 +1,30 @@
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "throwError.h"
 
-void throwOnError(int confirmation, char* operationName) {
-    if(!confirmation || confirmation == NULL) {
-        fprintf(stderr, "[-] %s operation failed : %d\n", &operationName, confirmation);
-        exit(EXIT_FAILURE); 
-    } 
-    printf("[+] %s operation success : %d\n", &operationName, confirmation); 
+void throwOnError(int confirmation, const char *operationName, ...) {
+  if (!confirmation) {
+    va_list arguments;
+    va_start(arguments, operationName);
+
+    fprintf(stderr, "[-] ");
+    vfprintf(stderr, operationName, arguments);
+    fprintf(stderr, "\n");
+
+    va_end(arguments);
+
+    exit(EXIT_FAILURE);
+  }
 }
 
+void *throwOnMallocError(size_t allocatedSize, const char *mallocError) {
+  void *ptr = malloc(allocatedSize);
+  if (ptr == NULL) {
+    ERR("Memory allocation failed : %s", mallocError);
+    exit(EXIT_FAILURE);
+  }
 
-int throwOnReadErr(int confirmation, char *operationName) {
-    if(!confirmation || confirmation == NULL || confirmation == EOF) {
-        fprintf(stderr, "[-] %s operation failed : %d\n", &operationName); 
-        exit(EXIT_FAILURE); 
-    }
-
-    return 1;
+  return ptr;
 }
