@@ -1,6 +1,16 @@
 #include "inputHandler.h"
 #include "throwError.h"
 
+/*
+  This function prompts the user for input if --prompt=interactive or
+  -p=interactive is passed as a command line argument
+
+  It checks whether the provided argument for the input is a number or not and
+  keeps the user input prompt in a loop until the user provides a integer value
+
+  An error indicating invalid input type is printed if the user enters a input
+  of invalid type, e.g. a character.
+*/
 double validateInput(const char *userInputPrompt) {
   double inputValue;
   char inputBuffer[100];
@@ -31,6 +41,13 @@ double validateInput(const char *userInputPrompt) {
     }
   }
 }
+
+/*
+  Convert the integer values of the time it would take to finish a given trail
+  into standard units of time - hours, minutes and seconds
+
+  Use double floating point precision values for more accurate results
+*/
 
 void convertTrailThresholds(double userInputHours, int *hrs, int *min,
                             int *sec) {

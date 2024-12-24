@@ -88,7 +88,6 @@ void test_validateTrailData_mismatchCount() {
   assert(restoredCount == invalidCount);
   OK("File restored to original invalid count: %d", restoredCount);
 
-  // Step 5: Cleanup backup file
   unlink(backupPath);
 
   OK("validate_TrailData (mismatched count) test passed.");

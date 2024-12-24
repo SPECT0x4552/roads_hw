@@ -1,4 +1,4 @@
-# Define colors for output
+
 function Write-Yellow($Message) {
     Write-Host $Message -ForegroundColor Yellow
 }
@@ -62,7 +62,7 @@ Start-Sleep -Seconds 2
 # Test 7: Mismatched count with FILE1
 Write-Yellow "Running test 7: Mismatched count with $file1..."
 Copy-Item $file1 $tempFile1
-(Get-Content $tempFile1) -replace '^.*$', '4' | Set-Content $tempFile1 # Introduce mismatch in trail count
+(Get-Content $tempFile1) -replace '^.*$', '4' | Set-Content $tempFile1 
 Start-Process -NoNewWindow -Wait -FilePath "./trails.exe" -ArgumentList "--input=$tempFile1"
 Remove-Item $tempFile1
 Start-Sleep -Seconds 2
@@ -70,7 +70,7 @@ Start-Sleep -Seconds 2
 # Test 8: Mismatched count with FILE2
 Write-Yellow "Running test 8: Mismatched count with $file2..."
 Copy-Item $file2 $tempFile2
-(Get-Content $tempFile2) -replace '^.*$', '3' | Set-Content $tempFile2 # Introduce mismatch in trail count
+(Get-Content $tempFile2) -replace '^.*$', '3' | Set-Content $tempFile2 
 Start-Process -NoNewWindow -Wait -FilePath "./trails.exe" -ArgumentList "--input=$tempFile2"
 Remove-Item $tempFile2
 Start-Sleep -Seconds 2

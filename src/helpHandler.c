@@ -2,6 +2,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/*
+       Not much to say here, this function is called when --help command line
+   argument is passed alongside the executable and the manual is just printed
+   out and the program is exited
+*/
+
 void displayProgramHelp() {
   printf("Usage: ./trails [OPTIONS]\n");
   printf("\n");
