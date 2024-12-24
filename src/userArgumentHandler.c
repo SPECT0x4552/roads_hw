@@ -1,3 +1,20 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  processHandler.c
+ *
+ *    Description: List of functions that parse the user's command line
+ * arguments.
+ *
+ *        Version:  1.0
+ *        Created:  12/21/2024 08:13:58 PM
+ *       Compiler:  gcc
+ *
+ *         Author:  Karl Marten Jaaska,
+ *   Organization:  TalTech
+ *
+ * ========================================================================================
+ */
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>

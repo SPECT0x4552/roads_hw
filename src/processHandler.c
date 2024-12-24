@@ -1,3 +1,21 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  processHandler.c
+ *
+ *    Description: List of function that manage the process of finding the
+ * appropriate trail(s) for the user.
+ *
+ *        Version:  1.0
+ *        Created:  12/13/2024 04:13:58 PM
+ *       Compiler:  gcc
+ *
+ *         Author:  Karl Marten Jaaska,
+ *   Organization:  TalTech
+ *
+ * =====================================================================================
+ */
+
 #include "processHandler.h"
 #include "fileHandler.h"
 #include "inputHandler.h"
@@ -42,7 +60,7 @@ void process_DeterminePrompt(const char *fileName, PromptMode userPromptMode) {
   case PROMPT_NONE:
     finishThreshold = extract_Threshold(fileName);
     break;
-  // If there is no valid command line argumentts, throw an error
+  // If there are no valid command line argumentts, throw an error
   default:
     throwOnError(0, "Invalid prompt mode.");
   }

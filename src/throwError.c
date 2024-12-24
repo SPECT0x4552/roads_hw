@@ -1,3 +1,19 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  processHandler.c
+ *
+ *    Description: Error handling functions that are used as wrappers.
+ *
+ *        Version:  1.0
+ *        Created:  12/12/2024 06:13:58 PM
+ *       Compiler:  gcc
+ *
+ *         Author:  Karl Marten Jaaska,
+ *   Organization:  TalTech
+ *
+ * =====================================================================================
+ */
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>

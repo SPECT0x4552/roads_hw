@@ -1,6 +1,11 @@
-4
+9
+Keskmine 9.98
+Ronimine 5.00
+Pikk 17.52
+Lyhike 3.73
+Rada2 6.19
 Mets 4.92
-Mets2 5.05
+Soo3 5.05
 Lyhike2 3.81
 Varemed 5.99
 1

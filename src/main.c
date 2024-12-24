@@ -1,3 +1,20 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  processHandler.c
+ *
+ *    Description: Entry point for the entire program.
+ *
+ *        Version:  1.0
+ *        Created:  12/5/2024 01:13:58 PM
+ *       Compiler:  gcc
+ *
+ *         Author:  Karl Marten Jaaska,
+ *   Organization:  TalTech
+ *
+ * =====================================================================================
+ */
+
 #include "helpHandler.h"
 #include "processHandler.h"
 #include "throwError.h"

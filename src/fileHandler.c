@@ -1,4 +1,22 @@
 /*
+ * =====================================================================================
+ *
+ *       Filename:  fileHandler.c
+ *
+ *    Description: Functions for handling the input data file and extracting
+ * data from it.
+ *
+ *        Version:  1.0
+ *        Created:  12/12/2024 05:50:58 PM
+ *       Compiler:  gcc
+ *
+ *         Author:  Karl Marten Jaaska,
+ *   Organization:  TalTech
+ *
+ * =====================================================================================
+ */
+
+/*
   The functions in this file handle all the operations for handling the file :
   - Validating the data of the file
   - Correcting and formatting the file there is a need for it
@@ -82,7 +100,7 @@ int validate_TrailData(FILE **fdescriptor, const char *fileName) {
 
   /*
     The following functions basically copy all the data over to the corrected
-    file
+    file that was created as a .tmp
   */
   throwOnError(fprintf(tempFileHandler, "%d\n", verifiedCount) > 0,
                "Failed to write corrected trail count.");
@@ -108,7 +126,7 @@ int validate_TrailData(FILE **fdescriptor, const char *fileName) {
                "Failed to rename the corrected input file.");
   /*
     Because the file descriptor is passed as a double pointer, open the
-    file again so that the processing function can use it as well
+    file again so that the following functions can use the file handle
   */
   *fdescriptor = fopen(fileName, "r");
   throwOnError(*fdescriptor != NULL, "Failed to reopen corrected input file.");
@@ -200,7 +218,7 @@ static int compare_Trails(const void *a, const void *b) {
   return 0;
 }
 
-// Quicksort
+// Quicksort sorting the trails based on their length
 void sort_Trails(int numberOfTrails, Trail *listOfTrails) {
   if (!listOfTrails || numberOfTrails <= 0)
     throwOnError(0, "Invalid parameters");

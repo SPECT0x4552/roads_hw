@@ -1,3 +1,20 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  helpHandler.c
+ *
+ *    Description: Function for displaying the user manual.
+ *
+ *        Version:  1.0
+ *        Created:  12/13/2024 03:13:58 PM
+ *       Compiler:  gcc
+ *
+ *         Author:  Karl Marten Jaaska,
+ *   Organization:  TalTech
+ *
+ * =====================================================================================
+ */
+
 #include "helpHandler.h"
 #include <stdio.h>
 #include <stdlib.h>

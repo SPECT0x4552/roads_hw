@@ -1,3 +1,21 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  processHandler.c
+ *
+ *    Description: A function that is used as a formating utility to remove a
+ * blank newline if a file needs to be modified.
+ *
+ *        Version:  1.0
+ *        Created:  12/12/2024 10:50:58 PM
+ *       Compiler:  gcc
+ *
+ *         Author:  Karl Marten Jaaska,
+ *   Organization:  TalTech
+ *
+ * =====================================================================================
+ */
+
 #include "formattingHandler.h"
 
 /*

@@ -1,3 +1,20 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  inputHandler.c
+ *
+ *    Description: Function for handling user input from the command line.
+ *
+ *        Version:  1.0
+ *        Created:  12/13/2024 04:34:58 PM
+ *       Compiler:  gcc
+ *
+ *         Author:  Karl Marten Jaaska,
+ *   Organization:  TalTech
+ *
+ * =====================================================================================
+ */
+
 #include "inputHandler.h"
 #include "throwError.h"
 

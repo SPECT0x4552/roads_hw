@@ -10,11 +10,7 @@
 
 #define READ_BUFFER_INIT 512
 
-#ifndef OK
-#define OK(msg, ...) printf("[+] " msg "\n", ##__VA_ARGS__)
-#endif
-
-// file backup and restoring utility functions
+// f_descriptor backup and restoring utility functions
 void backupFile(const char *filePath, const char *backupPath) {
   FILE *original = fopen(filePath, "r");
   FILE *backup = fopen(backupPath, "w");
@@ -48,25 +44,26 @@ void restoreFile(const char *backupPath, const char *originalPath) {
 void test_validateTrailData_mismatchCount() {
   const char *filePath = "tests/mismatched_count.txt";
 
-  FILE *file = fopen(filePath, "r");
-  assert(file != NULL);
+  FILE *f_descriptor = fopen(filePath, "r");
+  assert(f_descriptor != NULL);
 
   int invalidCount = 0;
-  int readResult = fscanf(file, "%d", &invalidCount);
-  fclose(file);
+  int readResult = fscanf(f_descriptor, "%d", &invalidCount);
+  fclose(f_descriptor);
 
   assert(readResult == 1);
   OK("Read invalid declared count: %d", invalidCount);
 
-  // just a backup file to restore the original file after the tests have passed
+  // just a backup file descriptor to restore the original file descriptor after
+  // the tests have passed
   const char *backupPath = "tests/mismatched_count_backup.txt";
   backupFile(filePath, backupPath);
 
-  file = fopen(filePath, "r+");
-  assert(file != NULL);
+  f_descriptor = fopen(filePath, "r+");
+  assert(f_descriptor != NULL);
 
-  int correctedCount = validate_TrailData(&file, filePath);
-  fclose(file);
+  int correctedCount = validate_TrailData(&f_descriptor, filePath);
+  fclose(f_descriptor);
 
   OK("Corrected count after validation: %d", correctedCount);
 
@@ -76,13 +73,13 @@ void test_validateTrailData_mismatchCount() {
 
   restoreFile(backupPath, filePath);
 
-  // verify that the restored file has the invalid count
-  file = fopen(filePath, "r");
-  assert(file != NULL);
+  // verify that the restored f_descriptor has the invalid count
+  f_descriptor = fopen(filePath, "r");
+  assert(f_descriptor != NULL);
 
   int restoredCount = 0;
-  readResult = fscanf(file, "%d", &restoredCount);
-  fclose(file);
+  readResult = fscanf(f_descriptor, "%d", &restoredCount);
+  fclose(f_descriptor);
 
   assert(readResult == 1);
   assert(restoredCount == invalidCount);
@@ -95,11 +92,11 @@ void test_validateTrailData_mismatchCount() {
 
 // test validate_TrailData with valid input
 void test_validateTrailData_validInput() {
-  FILE *file = fopen("tests/valid_input.txt", "r");
-  assert(file != NULL);
+  FILE *f_descriptor = fopen("tests/valid_input.txt", "r");
+  assert(f_descriptor != NULL);
 
-  int trailCount = validate_TrailData(&file, "tests/valid_input.txt");
-  fclose(file);
+  int trailCount = validate_TrailData(&f_descriptor, "tests/valid_input.txt");
+  fclose(f_descriptor);
 
   // ensure no correction was needed and the count is valid
   assert(trailCount == 9);
@@ -115,12 +112,12 @@ void test_validateTrailData_invalidInput() {
 
   if (pid == 0) {
     // Child process: Run the function that triggers the error
-    FILE *file = fopen(filePath, "r");
-    assert(file != NULL);
+    FILE *f_descriptor = fopen(filePath, "r");
+    assert(f_descriptor != NULL);
 
-    validate_TrailData(&file, filePath);
+    validate_TrailData(&f_descriptor, filePath);
 
-    fclose(file);
+    fclose(f_descriptor);
     exit(EXIT_SUCCESS); // Should not reach here if error is thrown
   } else {
     // Parent process: Wait for the child to determine if it exited as expected
@@ -145,13 +142,13 @@ void test_validateTrailData_wrongStructureInput() {
 
   if (pid == 0) {
     // child process runs the functions to ensure that it fails
-    FILE *file = fopen(filePath, "r");
-    assert(file != NULL);
+    FILE *f_descriptor = fopen(filePath, "r");
+    assert(f_descriptor != NULL);
 
     // attempt to validate the trail data; it should exit on error
-    validate_TrailData(&file, filePath);
+    validate_TrailData(&f_descriptor, filePath);
 
-    fclose(file);
+    fclose(f_descriptor);
     exit(EXIT_SUCCESS); // if it reaches this, the test failed
   } else {
     // parent process waits for the child and checks its status
