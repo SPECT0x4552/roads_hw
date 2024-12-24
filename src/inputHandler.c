@@ -6,7 +6,10 @@ double validateInput(const char *userInputPrompt) {
   char inputBuffer[100];
 
   while (1) {
-    printf("%s", userInputPrompt);
+    if (userInputPrompt && *userInputPrompt != '\0') {
+      printf("%s", userInputPrompt);
+    }
+
     if (fgets(inputBuffer, sizeof(inputBuffer), stdin) == NULL) {
       ERR("fgets failed");
       continue;

@@ -1,111 +1,117 @@
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "fileHandler.h"
+#include "formattingHandler.h"
 #include "throwError.h"
 
-int validateTrailData(FILE **fdescriptor, const char *fileName) {
+#define NAME_BUFFER 256
+#define READ_BUFFER_INIT 512
+
+int validate_TrailData(FILE **fdescriptor, const char *fileName) {
   rewind(*fdescriptor); // start from the beginning of the file
 
   int fileDeclaredCount, verifiedCount = 0;
-  throwOnError(fscanf(*fdescriptor, "%d", &fileDeclaredCount) == 1,
-               "Failed to to retrieve trail data.");
 
-  char trailLine[256];
-  char trailNameHelper[256];
+  throwOnError(fscanf(*fdescriptor, "%d", &fileDeclaredCount) == 1,
+               "Failed to retrieve trail count.");
+
+  char validationBuffer[NAME_BUFFER];
   double trailLengthHelper;
 
-  while (fscanf(*fdescriptor, "%s %lf", trailNameHelper, &trailLengthHelper) ==
-         2) {
+  while (fscanf(*fdescriptor, "%255s %lf", validationBuffer,
+                &trailLengthHelper) == 2) {
+    throwOnError(isalpha(validationBuffer[0]) && trailLengthHelper > 0,
+                 "Invalid entry in the input file - trail name must consist of "
+                 "alphabetic characters and thet trail length needs to be a "
+                 "positive number.");
     ++verifiedCount;
   }
 
-  throwOnError(feof(*fdescriptor) || ferror(*fdescriptor), "fscanf failed.");
+  throwOnError(feof(*fdescriptor), "Error reading input file.");
 
-  if (fileDeclaredCount != verifiedCount) {
-    printf("[!] The number of trails declared in the file (%d) does not "
-           "match the actual count of trails (%d).\n",
-           fileDeclaredCount, verifiedCount);
-
-    char tempHelperName[256];
-    snprintf(tempHelperName, sizeof(tempHelperName), "%s.tmp", fileName);
-
-    FILE *tempHelper;
-    throwOnError((tempHelper = fopen(tempHelperName, "w")) != NULL,
-                 "Failed to create a temporary fix file.");
-
-    fprintf(tempHelper, "%d\n", verifiedCount);
-
+  if (fileDeclaredCount == verifiedCount) {
+    OK("File validation complete. Declared trail count (%d) matches the input "
+       "file count (%d).",
+       fileDeclaredCount, verifiedCount);
     rewind(*fdescriptor);
-
-    fscanf(*fdescriptor, "%*d");
-    while (fgets(trailLine, sizeof(trailLine), *fdescriptor)) {
-
-      /*
-        fgets copies the contents of the original file to the temporary one but
-        fgets includes a newline operator (\n) at the end of the line so it
-        results in an extra blank line being added into the file with the
-        corrected data what is not what we want
-      */
-
-      /*
-         I will use fprintf to cut out the newline operator and replace it with
-         NULL operator
-      */
-      char *startFormat = trailLine;
-      while (*startFormat == ' ' || *startFormat == '\t')
-        startFormat++;
-
-      size_t replaceLength = strlen(startFormat);
-      while (replaceLength > 0 && (startFormat[replaceLength - 1] == '\n' ||
-                                   startFormat[replaceLength - 1] == '\r' ||
-                                   startFormat[replaceLength - 1] == ' ' ||
-                                   startFormat[replaceLength - 1] == '\t')) {
-        startFormat[--replaceLength] = '\0';
-      }
-
-      if (replaceLength > 0) {
-        fprintf(tempHelper, "%s\n", startFormat);
-      }
-    }
-
-    fclose(tempHelper);
-    fclose(*fdescriptor);
-
-    throwOnError(remove(fileName) == 0 && rename(tempHelperName, fileName) == 0,
-                 "Failed to remove invalid data file and rename the corrected "
-                 "data file.");
-
-    OK("Corrected trail count, rewrote data file : '%s'", fileName);
-
-    *fdescriptor = fopen(fileName, "r");
-    if (!fdescriptor) {
-      ERR("Failed to reopen corrected data file");
-      exit(EXIT_FAILURE);
-    } else {
-      __asm__ __volatile__("nop");
-    }
-    /*
-      Reset the file pointer once again so that it can be interpreted from the
-      beginning
-    */
-    rewind(*fdescriptor);
+    return verifiedCount;
   }
+
+  WARN("Declared trail count (%d) in the input file does not match the actual "
+       "count of trails (%d).",
+       fileDeclaredCount, verifiedCount);
+
+  char tempFileName[FILENAME_MAX];
+  snprintf(tempFileName, sizeof(tempFileName), "%s.tmp", fileName);
+
+  FILE *tempFileHandler = fopen(tempFileName, "w");
+  throwOnError(tempFileHandler != NULL, "Failed to create .tmp file.");
+
+  throwOnError(fprintf(tempFileHandler, "%d\n", verifiedCount) > 0,
+               "Failed to write corrected trail count.");
+
+  rewind(*fdescriptor);
+  fscanf(*fdescriptor, "%*d");
+
+  char lineBuffer[READ_BUFFER_INIT];
+  while (fgets(lineBuffer, sizeof(lineBuffer), *fdescriptor)) {
+    char *trimLine = formatWhitespace(lineBuffer);
+    if (*trimLine != '\0') {
+      fprintf(tempFileHandler, "%s\n", trimLine);
+    }
+  }
+
+  fclose(tempFileHandler);
+  fclose(*fdescriptor);
+
+  throwOnError(remove(fileName) == 0,
+               "Failed to remove the invalid input file.");
+  throwOnError(rename(tempFileName, fileName) == 0,
+               "Failed to rename the corrected input file.");
+
+  *fdescriptor = fopen(fileName, "r");
+  throwOnError(*fdescriptor != NULL, "Failed to reopen corrected input file.");
+
+  rewind(*fdescriptor);
   return verifiedCount;
+}
+
+double extract_Threshold(const char *fileName) {
+  FILE *fdescriptor = fopen(fileName, "r");
+
+  throwOnError(fdescriptor != NULL, "Failed to open input file.");
+
+  double timingThreshold = 0;
+  char lineBuffer[READ_BUFFER_INIT];
+
+  while (fgets(lineBuffer, sizeof(lineBuffer), fdescriptor)) {
+    char *thresholdLine = formatWhitespace(lineBuffer);
+    if (*thresholdLine == '\0') {
+      continue;
+    }
+    timingThreshold = atof(thresholdLine);
+  }
+  fclose(fdescriptor);
+
+  throwOnError(timingThreshold > 0,
+               "Failed to extract the timing threshold from the input file.");
+
+  return timingThreshold;
 }
 
 void read_Trails(FILE *fdescriptor, int numberOfTrails, Trail **listOfTrails) {
 
   rewind(fdescriptor);
-
-  throwOnError(fscanf(fdescriptor, "%*d") == 0, "Failed to skip trail count.");
+  throwOnError(fscanf(fdescriptor, "%*d") != 1, "Failed to skip trail count.");
 
   *listOfTrails = (Trail *)throwOnMallocError(
       numberOfTrails * sizeof(Trail), "Trail list instance init failed");
 
   for (int i = 0; i < numberOfTrails; ++i) {
-    char trailNameHelper[100];
+    char trailNameHelper[NAME_BUFFER];
     double trailLengthHelper;
 
     throwOnError(fscanf(fdescriptor, "%255s %lf", trailNameHelper,
@@ -119,17 +125,23 @@ void read_Trails(FILE *fdescriptor, int numberOfTrails, Trail **listOfTrails) {
   }
 }
 
-void sort_Trails(int numberOfTrails, Trail *listOfTrails) {
-  for (int i = 0; i < numberOfTrails - 1; ++i) {
-    for (int j = 0; j < numberOfTrails - i - 1; ++j) {
-      if (listOfTrails[j].trailLength > listOfTrails[j + 1].trailLength) {
+static int compare_Trails(const void *a, const void *b) {
+  const Trail *a_Trail = (const Trail *)a;
+  const Trail *b_Trail = (const Trail *)b;
 
-        Trail tempHelper = listOfTrails[j];
-        listOfTrails[j] = listOfTrails[j + 1];
-        listOfTrails[j + 1] = tempHelper;
-      }
-    }
-  }
+  if (a_Trail->trailLength < b_Trail->trailLength)
+    return -1;
+  if (a_Trail->trailLength > b_Trail->trailLength)
+    return 1;
+
+  return 0;
+}
+
+void sort_Trails(int numberOfTrails, Trail *listOfTrails) {
+  if (!listOfTrails || numberOfTrails <= 0)
+    throwOnError(0, "Invalid parameters");
+
+  qsort(listOfTrails, numberOfTrails, sizeof(Trail), compare_Trails);
 }
 
 Trail *filter_Trails(int numberOfTrails, Trail *listOfTrails,

@@ -11,8 +11,8 @@ typedef struct {
   double trailLength;
 } Trail;
 
-int validateTrailData(FILE **fdescriptor, const char *fileName);
-
+int validate_TrailData(FILE **fdescriptor, const char *fileName);
+double extract_Threshold(const char *fileName);
 void read_Trails(FILE *fdescriptor, int numberOfTrails, Trail **listOfTrails);
 
 void sort_Trails(int numberOfTrails, Trail *listOfTrails);
