@@ -88,11 +88,10 @@ void process_TrailFinder(const char *fileName, double trailFilter,
     int hours, minutes, seconds;
     convertTrailThresholds(listOfTrails[0].trailLength / 5.0, &hours, &minutes,
                            &seconds);
-    hours > 0
-        ? printf("[%d] %s: %d hours, %d minutes, %d seconds to finish.\n", 1,
-                 listOfFilteredTrails[0].trailName, hours, minutes, seconds)
-        : printf("[%d] %s: %d minutes, %d seconds to finish.\n", 1,
-                 listOfFilteredTrails[0].trailName, minutes, seconds);
+    hours > 0 ? printf("[%d] %s: %d hours, %d minutes, %d seconds to finish.\n",
+                       1, listOfTrails[0].trailName, hours, minutes, seconds)
+              : printf("[%d] %s: %d minutes, %d seconds to finish.\n", 1,
+                       listOfTrails[0].trailName, minutes, seconds);
   }
 
   cleanup(numberOfTrails, listOfTrails);
