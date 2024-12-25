@@ -3,7 +3,7 @@
  *
  *       Filename:  processHandler.c
  *
- *    Description: List of function that manage the process of finding the
+ *    Description: List of functions that manage the process of finding the
  * appropriate trail(s) for the user.
  *
  *        Version:  1.0

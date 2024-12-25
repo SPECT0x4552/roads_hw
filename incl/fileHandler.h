@@ -1,3 +1,21 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  fileHandler.h
+ *
+ *    Description: Header file for the source file that embeds functions for handling the input data file and extracting
+ * data from it.
+ *
+ *        Version:  1.0
+ *        Created:  12/12/2024 05:50:58 PM
+ *       Compiler:  gcc
+ *
+ *         Author:  Karl Marten Jaaska,
+ *   Organization:  TalTech
+ *
+ * =====================================================================================
+ */
+
 #ifndef READ_FILE_H
 #define READ_FILE_H
 

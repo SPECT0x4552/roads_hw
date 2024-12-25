@@ -1,7 +1,7 @@
 /*
  * =====================================================================================
  *
- *       Filename:  processHandler.c
+ *       Filename: formattingHandler.c
  *
  *    Description: A function that is used as a formating utility to remove a
  * blank newline if a file needs to be modified.
@@ -15,6 +15,7 @@
  *
  * =====================================================================================
  */
+ 
 
 #include "formattingHandler.h"
 

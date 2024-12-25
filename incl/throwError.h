@@ -1,3 +1,20 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  throwError.h
+ *
+ *    Description: Header file for declarations of error handling functions that are used as wrappers.
+ *
+ *        Version:  1.0
+ *        Created:  12/12/2024 06:13:58 PM
+ *       Compiler:  gcc
+ *
+ *         Author:  Karl Marten Jaaska,
+ *   Organization:  TalTech
+ *
+ * =====================================================================================
+ */
+
 #ifndef THROW_ERROR_H
 #define THROW_ERROR_H
 
@@ -7,8 +24,6 @@
 #define INFO(msg, ...) printf("[*] " msg "\n", ##__VA_ARGS__)
 #define WARN(msg, ...) printf("[!] " msg "\n", ##__VA_ARGS__)
 
-// macro for command line arguments
-#define ARG(i) (argc > i ? argv[i] : NULL)
 
 void throwOnError(int confirmation, const char *operationName, ...);
 

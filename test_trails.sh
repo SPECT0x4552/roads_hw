@@ -6,11 +6,16 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No color
 
-# Test files
 FILE1="082.txt"
 FILE2="081.txt"
+EXEC="trails"
 
-# Ensure test files exist
+if [[ ! -f "$EXEC" ]]; then 
+  echo -e "${RED}Error: Executable ($EXEC) is missng!${NC}"
+  exit 1
+fi
+
+
 if [[ ! -f "$FILE1" || ! -f "$FILE2" ]]; then
   echo -e "${RED}Error: Test files $FILE1 or $FILE2 are missing!${NC}"
   exit 1

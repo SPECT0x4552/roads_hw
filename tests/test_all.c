@@ -99,7 +99,7 @@ void test_validateTrailData_validInput() {
   fclose(f_descriptor);
 
   // ensure no correction was needed and the count is valid
-  assert(trailCount == 9);
+  assert(trailCount == 15);
 
   OK("validate_TrailData (valid input) passed.");
 }

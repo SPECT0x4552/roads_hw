@@ -1,7 +1,7 @@
 /*
  * =====================================================================================
  *
- *       Filename:  processHandler.c
+ *       Filename:  userArgumentHandler.c
  *
  *    Description: List of functions that parse the user's command line
  * arguments.
@@ -15,6 +15,7 @@
  *
  * ========================================================================================
  */
+ 
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
@@ -27,7 +28,7 @@
   a short set of introductions is provided as to how the program is intended to
   be used
 */
-void printProgramUsage() {
+void printProgramUsage(void) {
   INFO("Usage : ");
   INFO("-i <input_file> / --input=<input_file>");
   INFO("-p=interactive / --prompt=interactive");

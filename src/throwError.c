@@ -1,7 +1,7 @@
 /*
  * =====================================================================================
  *
- *       Filename:  processHandler.c
+ *       Filename:  throwError.c
  *
  *    Description: Error handling functions that are used as wrappers.
  *
@@ -14,6 +14,7 @@
  *
  * =====================================================================================
  */
+ 
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -50,6 +51,7 @@ void throwOnError(int confirmation, const char *operationName, ...) {
 void *throwOnMallocError(size_t allocatedSize, const char *mallocError) {
   void *ptr = malloc(allocatedSize);
   if (ptr == NULL) {
+    free(ptr); 
     ERR("Memory allocation failed : %s", mallocError);
     exit(EXIT_FAILURE);
   }

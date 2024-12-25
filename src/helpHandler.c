@@ -25,7 +25,7 @@
    out and the program is exited
 */
 
-void displayProgramHelp() {
+void displayProgramHelp(void) {
   printf("Usage: ./trails [OPTIONS]\n");
   printf("\n");
   printf("Options:\n");
